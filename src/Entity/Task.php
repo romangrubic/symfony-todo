@@ -21,13 +21,12 @@ class Task
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Length(min=3)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
-     * @Assert\NotBlank()
-     * @Assert\Type("\DateTime")
+     * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
@@ -53,12 +52,12 @@ class Task
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Task{% endblock %}
+
+{% block body %}
+    <div class="w-25 m-auto border p-3 mt-5">
+        <h2 class="text-center mb-4">Edit Task</h2>
+        {{ form_start(form) }}
+            {{ form_row(form.name, {
+                label: false,
+                attr: {
+                    placeholder: 'Task name...'
+                },
+                row_attr: {
+                    class: 'input'
+                }
+            }) }}
+            <br>
+            {{ form_row(form.description, {
+                label: false,
+                attr: {
+                    placeholder: 'Task name...'
+                },
+                row_attr: {
+                    class: 'input'
+                }
+            }) }}
+            <br>
+            {{ form_row(form.agreeTerms, {
+                label_attr: {
+                    class: 'checkbox-switch'
+                }
+            }) }}
+
+            {{ form_row(form.save, {
+                attr: {
+                    class: 'btn-primary btn col-12',
+                },
+                label: 'Update'
+            }) }}
+
+            <a class="btn-warning btn col-12 " href="/task">Cancel</a>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

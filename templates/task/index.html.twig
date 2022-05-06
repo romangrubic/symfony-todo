@@ -1,20 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TaskController!{% endblock %}
+{% block title %}Task Manager{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <table>
+<div class="table-responsive w-25 m-auto">
+    <div class="container m-0 p-0">
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-success mt-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    <h3 class="text-center m-5">Add new Task <a class="btn-warning btn" href="/task/create"><></a></h3>
+    <table class="m-auto mt-5 mb-5 border-dark table table-hover">
         <thead>
-            <tr>
+            <tr class="table-primary">
                 <th>Id</th>
                 <th>Name</th>
-                <th>Description</th>
+                <th>Info</th>
+                <th>Created at</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +27,15 @@
             <tr>
                 <td>{{task.id}}</td>
                 <td>{{task.name}}</td>
-                <td>{{task.description}}</td>
+                <td class="text-center"><i title="Name: &quot;{{task.name}}&quot; &#013;Description: &quot;{{task.description}}&quot; &#013;Created at: &quot;{{task.createdAt|format_datetime( 'full', 'short', locale='hr' )}}&quot;"
+                                           style="cursor: pointer"
+                                           class="fas fa-info-circle"></i></td>
+                <td>{{task.createdAt|format_datetime( 'medium', 'short', locale='hr' )}}</td>
+                <td class="text-center">
+{#                     Path#}
+                    <a href="{{ path('task_delete', {id:task.id} ) }}" title="Delete task &quot;{{task.name}}&quot; ?"><i style="color: #e80c0c;" class="fas fa-trash px-1"></i></a>
+                    <a href="{{ path('task_edit', {id:task.id} ) }}" title="Edit task &quot;{{task.name}}&quot; ?"><i style="color: #008cff" class="fas fa-edit px-1"></i></a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

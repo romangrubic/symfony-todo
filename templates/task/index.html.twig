@@ -12,12 +12,11 @@
         {% endfor %}
     </div>
     <h3 class="text-center m-5">Add new Task <a class="btn-warning btn" href="/task/create"><></a></h3>
-    <table class="m-auto mt-5 mb-5 border-dark table table-hover">
+    <table class="m-auto mt-5 mb-5 border rounded-1 table table-hover">
         <thead>
             <tr class="table-primary">
                 <th>Id</th>
                 <th>Name</th>
-                <th>Info</th>
                 <th>Created at</th>
                 <th>Action</th>
             </tr>
@@ -27,9 +26,6 @@
             <tr>
                 <td>{{task.id}}</td>
                 <td>{{task.name}}</td>
-                <td class="text-center"><i title="Name: &quot;{{task.name}}&quot; &#013;Description: &quot;{{task.description}}&quot; &#013;Created at: &quot;{{task.createdAt|format_datetime( 'full', 'short', locale='hr' )}}&quot;"
-                                           style="cursor: pointer"
-                                           class="fas fa-info-circle"></i></td>
                 <td>{{task.createdAt|format_datetime( 'medium', 'short', locale='hr' )}}</td>
                 <td class="text-center">
 {#                     Path#}
@@ -37,6 +33,9 @@
                     <a href="{{ path('task_edit', {id:task.id} ) }}" title="Edit task &quot;{{task.name}}&quot; ?"><i style="color: #008cff" class="fas fa-edit px-1"></i></a>
                 </td>
             </tr>
+{#                <tr>#}
+{#                    <td colspan="4">Opis: {{ task.description}}</td>#}
+{#                </tr>#}
             {% endfor %}
         </tbody>
     </table>

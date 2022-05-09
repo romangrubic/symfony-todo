@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TaskController extends AbstractController
 {
@@ -25,9 +26,9 @@ class TaskController extends AbstractController
     /**
      * @Route("/task", name="task")
      */
-    public function index(): Response
+    public function index(UserInterface $user): Response
     {
-        $tasks = $this->repository->findAll();
+        $tasks = $this->repository->findBy(['userId'=>$user]);
 
         return $this->render('task/index.html.twig', [
             'tasks' => $tasks,
@@ -37,7 +38,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/task/create",name = "task_create")
      */
-    public function create(Request $request): Response
+    public function create(Request $request, UserInterface $user): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskFormType::class, $task);
@@ -45,6 +46,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $task = $form->getData();
+            $task->setUserId($user);
             $task->setCreatedAt(new \DateTime('now')) ;
 
             $this->em->persist($task);
@@ -61,8 +63,14 @@ class TaskController extends AbstractController
     /**
      * @Route("/task/edit/{id}", name="task_edit", methods={"GET", "POST"})
      */
-    public function editTask(Task $task, Request $request): Response
+    public function editTask(int $id, Request $request, UserInterface $user): Response
     {
+        $task = $this->repository->findOneBy(['id'=>$id, 'userId'=>$user]);
+        // Check if task exists with correct User
+        if (!$task) {
+            return $this->redirectToRoute('task');
+        }
+
         $form = $this->createForm(TaskFormType::class, $task);
         $form->handleRequest($request);
 

@@ -13,7 +13,7 @@ class TaskFixtures extends Fixture
         for ($i = 0; $i < 20; $i++) {
             $task = new Task();
             $task->setName('Task number: ' . $i);
-            $task->setCreatedAt(new \DateTimeImmutable('now'));
+            $task->setCreatedAt(new \DateTime('now'));
 
             $manager->persist($task);
         }

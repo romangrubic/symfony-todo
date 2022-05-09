@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block body %}
+    <div class="table-responsive w-50 m-auto">
+        <div class="container m-0 p-0">
+            {% for message in app.flashes('notice') %}
+                <div class="alert alert-success mt-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        <h3 class="text-center m-5">Add new Category <a class="btn-warning btn" href="#"><></a></h3>
+        <table class="m-auto mt-5 mb-5 border rounded-1 table table-hover">
+            <thead>
+            <tr class="table-primary">
+                <th>Id</th>
+                <th>Name</th>
+                <th>Parent</th>
+                <th>Last updated</th>
+                <th class="text-center">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{category.id}}</td>
+                    <td>{{category.name}}</td>
+                    <td>
+                        {% if category.parent is not null %}
+                        {{category.parent.name}}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if category.updatedAt is null %}
+                            {{category.createdAt|format_datetime( 'long', 'short', locale='hr' )}}
+                        {% else %}
+                            {{category.updatedAt|format_datetime( 'long', 'short', locale='hr' )}}
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {#                     Path#}
+                        <a type="button" title="See details of &quot;{{category.name}}&quot; ?" data-bs-toggle="modal" data-bs-target="#category{{category.id}}"><i style="color: green" class="fas fa-info-circle"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% for category in categories %}
+            {#                Modal with details #}
+            <div class="modal fade" id="category{{category.id}}" tabindex="-1" role="dialog" aria-labelledby="category{{category.id}}Label" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">{{ category.name }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Parent: {% if category.parent is not null %}
+                                    {{category.parent.name}}
+                                {% endif %}</p>
+                            <p>{{ category.description}}</p>
+                            <hr>
+                            <p>Updated at: {{category.updatedAt|format_datetime( 'long', 'medium', locale='hr' )}}</p>
+                            <p>Created at: {{category.createdAt|format_datetime( 'long', 'medium', locale='hr' )}}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" title="Edit category &quot;{{category.name}}&quot; ?"><i style="color: #008cff" class="fas fa-2x fa-edit px-1"></i></a>
+                            <a href="#" title="Delete category &quot;{{category.name}}&quot; ?"><i style="color: #e80c0c;" class="fas fa-2x fa-trash px-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -8,14 +8,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CategoryController extends AbstractController
+class CategoryController extends NavbarController
 {
 
-    private $em;
+    public $em;
     private $repository;
 
     public function __construct(ManagerRegistry $doctrine, CategoryRepository $repository)
     {
+        parent::__construct($repository);
         $this->em = $doctrine->getManager();
         $this->repository = $repository;
     }

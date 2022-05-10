@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\CategoryRepository;
 use App\Security\LoginFormAuthenticator;
 use App\Security\SecurityAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,42 +18,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
-class RegistrationController extends AbstractController
+class RegistrationController extends NavbarController
 {
+    public function __construct(ManagerRegistry $doctrine, CategoryRepository $repository)
+    {
+        parent::__construct($repository);
+    }
     /**
      * @Route("/register", name="register")
      */
-//    public function register(Request $request,
-//                             UserPasswordHasherInterface $userPasswordHasher,
-//                             EntityManagerInterface $entityManager): Response
-//    {
-//        $user = new User();
-//        $form = $this->createForm(RegistrationFormType::class, $user);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            //
-//            $user->setRoles(['ROLE_USER']);
-//            // encode the plain password
-//            $user->setPassword(
-//            $userPasswordHasher->hashPassword(
-//                    $user,
-//                    $form->get('plainPassword')->getData()
-//                )
-//            );
-//
-//            $entityManager->persist($user);
-//            $entityManager->flush();
-//            // do anything else you need here, like send an email
-//
-//            return $this->redirectToRoute('login');
-//        }
-//
-//        return $this->render('registration/register.html.twig', [
-//            'registrationForm' => $form->createView(),
-//        ]);
-//    }
-
     public function register(
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
@@ -82,6 +57,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+            'categories' =>$this->categories
         ]);
     }
 }
